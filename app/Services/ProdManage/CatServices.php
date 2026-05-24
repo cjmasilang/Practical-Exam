@@ -41,11 +41,6 @@ class CatServices
         return TblCat::whereIn('id', $ids)->delete();
     }
 
-    public function getArchived()
-    {
-        return TblCat::onlyTrashed()->get();
-    }
-
     public function restore(int $id)
     {
         return TblCat::onlyTrashed()->findOrFail($id)->restore();
