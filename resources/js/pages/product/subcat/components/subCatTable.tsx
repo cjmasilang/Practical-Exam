@@ -7,32 +7,34 @@ import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 
-interface Category {
+interface SubCategory {
     id: number;
     name: string;
     slug: string;
+    category: { name: string };
     created_at: string;
 }
 
-interface CatTableProps {
-    categories: Category[];
-    onEdit: (c: Category) => void;
+interface SubCatTableProps {
+    subCategories: SubCategory[];
+    onEdit: (sub: SubCategory) => void;
     onDelete: (id: number) => void;
     onSelectionChange: (ids: number[]) => void;
     onExportExcel: () => void;
     onExportPDF: () => void;
 }
 
-export function CatTable({
-    categories,
+export function SubCatTable({
+    subCategories,
     onEdit,
     onDelete,
     onSelectionChange,
     onExportExcel,
     onExportPDF
-}: CatTableProps) {
-    const columns = useMemo<ColumnDef<Category>[]>(() => [
+}: SubCatTableProps) {
+    const columns = useMemo<ColumnDef<SubCategory>[]>(() => [
         {
             id: "select",
             header: ({ table }) => (
@@ -53,7 +55,12 @@ export function CatTable({
             enableHiding: false,
         },
         { accessorKey: "id", header: "ID" },
-        { accessorKey: "name", header: "Name" },
+        {
+            accessorKey: "category.name",
+            header: "Category",
+            cell: ({ row }) => <Badge className="bg-red-600 hover:bg-red-700 text-white border-none">{row.original.category.name}</Badge>
+        },
+        { accessorKey: "name", header: "Sub-Category Name" },
         { accessorKey: "slug", header: "Slug" },
         {
             id: "actions",
@@ -72,7 +79,7 @@ export function CatTable({
                                     <Edit2 className="h-4 w-4" />
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent><p>Edit Category</p></TooltipContent>
+                            <TooltipContent><p>Edit Sub-Category</p></TooltipContent>
                         </Tooltip>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -85,7 +92,7 @@ export function CatTable({
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent><p>Delete Category</p></TooltipContent>
+                            <TooltipContent><p>Delete Sub-Category</p></TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
                 </div>
@@ -96,7 +103,7 @@ export function CatTable({
     return (
         <DataTable
             columns={columns}
-            data={categories}
+            data={subCategories}
             searchKey="name"
             onExportExcel={onExportExcel}
             onExportPDF={onExportPDF}

@@ -82,7 +82,7 @@ export function AppSidebar() {
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
                                         <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/categories">Categories</Link></SidebarMenuSubButton></SidebarMenuSubItem>
-                                        <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/sub-categories">Sub Categories</Link></SidebarMenuSubButton></SidebarMenuSubItem>
+                                        <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/subCat">Sub Categories</Link></SidebarMenuSubButton></SidebarMenuSubItem>
                                         <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/products">Product</Link></SidebarMenuSubButton></SidebarMenuSubItem>
                                     </SidebarMenuSub>
                                 </CollapsibleContent>
