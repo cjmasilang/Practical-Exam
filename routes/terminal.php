@@ -5,7 +5,7 @@ use App\Http\Controllers\Terminal\ReportController;
 use App\Http\Controllers\Terminal\SalesController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
     Route::prefix('pos')->name('pos.')->middleware('can:view_pos')->group(function () {
         Route::get('/', [PosController::class, 'index'])->name('index');
