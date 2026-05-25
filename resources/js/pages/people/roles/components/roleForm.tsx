@@ -1,11 +1,8 @@
-"use client";
-
 import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { showLoading, hideLoading } from "@/components/loading/toast-loading";
+import { Label } from '@/components/ui/label';
 import { route } from "ziggy-js";
 
 export function RoleForm({ role, permissions, onSuccess }: any) {
@@ -14,36 +11,43 @@ export function RoleForm({ role, permissions, onSuccess }: any) {
         permissions: role?.permissions.map((p: any) => p.name) || []
     });
 
-    const togglePermission = (pName: string) => {
-        setData('permissions', data.permissions.includes(pName)
-            ? data.permissions.filter((p: string) => p !== pName)
-            : [...data.permissions, pName]);
-    };
+    const groupedPermissions = permissions.reduce((acc: any, p: any) => {
+        const module = p.name.split('_')[1] || 'general';
+        if (!acc[module]) acc[module] = [];
+        acc[module].push(p);
+        return acc;
+    }, {});
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const tid = showLoading(role ? "Updating..." : "Creating...");
-        const options = { onSuccess: () => { hideLoading(tid); onSuccess(); }, onError: () => hideLoading(tid) };
-        if (role) put(route('roles.update', role.id), options);
-        else post(route('roles.store'), options);
+    const toggleModule = (module: string, checked: boolean) => {
+        const modulePerms = groupedPermissions[module].map((p: any) => p.name);
+        const newPerms = checked
+            ? [...new Set([...data.permissions, ...modulePerms])]
+            : data.permissions.filter((p: string) => !modulePerms.includes(p));
+        setData('permissions', newPerms);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-                <Label>Role Name</Label>
-                <Input value={data.name} onChange={e => setData('name', e.target.value)} />
-            </div>
-            <div className="space-y-2">
-                <Label>Permissions</Label>
-                <div className="grid grid-cols-2 gap-2 h-60 overflow-y-auto border p-2 rounded-xl">
-                    {permissions.map((p: any) => (
-                        <div key={p.id} className="flex items-center space-x-2">
-                            <Checkbox checked={data.permissions.includes(p.name)} onCheckedChange={() => togglePermission(p.name)} />
-                            <Label>{p.name}</Label>
+        <form onSubmit={(e) => { e.preventDefault(); role ? put(route('roles.update', role.id), { onSuccess }) : post(route('roles.store'), { onSuccess }); }} className="space-y-6">
+            <Input value={data.name} onChange={e => setData('name', e.target.value)} placeholder="Role Name" />
+
+            <div className="space-y-4">
+                {Object.entries(groupedPermissions).map(([module, perms]: any) => (
+                    <div key={module} className="border p-3 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2 font-bold uppercase text-xs">
+                            <Checkbox onCheckedChange={(c) => toggleModule(module, !!c)} /> {module}
                         </div>
-                    ))}
-                </div>
+                        <div className="grid grid-cols-3 gap-2">
+                            {perms.map((p: any) => (
+                                <div key={p.id} className="flex items-center gap-1 text-sm">
+                                    <Checkbox checked={data.permissions.includes(p.name)} onCheckedChange={() => {
+                                        const newP = data.permissions.includes(p.name) ? data.permissions.filter((i: string) => i !== p.name) : [...data.permissions, p.name];
+                                        setData('permissions', newP);
+                                    }} /> {p.name.split('_')[0]}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
             <Button disabled={processing} className="w-full">Save Role</Button>
         </form>
