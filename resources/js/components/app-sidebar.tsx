@@ -1,7 +1,9 @@
+"use client";
+
 import { Link } from '@inertiajs/react';
 import {
     BookOpen, FolderGit2, LayoutGrid, Users, Package,
-    ShoppingCart, BarChart3, ChevronRight, Store
+    ShoppingCart, BarChart3, ChevronRight, Store, UserCog
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -30,7 +32,7 @@ import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
-    { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+
 ];
 
 export function AppSidebar() {
@@ -66,6 +68,7 @@ export function AppSidebar() {
                                     <SidebarMenuSub>
                                         <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/users">Users</Link></SidebarMenuSubButton></SidebarMenuSubItem>
                                         <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/roles">Roles/Permissions</Link></SidebarMenuSubButton></SidebarMenuSubItem>
+                                        <SidebarMenuSubItem><SidebarMenuSubButton asChild><Link href="/customers">Customers</Link></SidebarMenuSubButton></SidebarMenuSubItem>
                                     </SidebarMenuSub>
                                 </CollapsibleContent>
                             </SidebarMenuItem>
