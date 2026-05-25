@@ -1,27 +1,34 @@
-# Laravel + React Starter Kit
+System Implementation Documentation
+1. Security & Authentication
+Role-Based Access Control (RBAC): Integrated Spatie Permission to manage granular user access.
 
-## Introduction
+Route Protection: Implemented can: middleware across all route groups to verify user permissions before accessing any module.
 
-Our React starter kit provides a robust, modern starting point for building Laravel applications with a React frontend using [Inertia](https://inertiajs.com).
+API Rate Limiting: Applied throttle:60,1 middleware to all authenticated routes to prevent brute-force attacks and service abuse.
 
-Inertia allows you to build modern, single-page React applications using classic server-side routing and controllers. This lets you enjoy the frontend power of React combined with the incredible backend productivity of Laravel and lightning-fast Vite compilation.
+Authorization Layers: Utilized Policy-based authorization within controllers via $this->authorize() to enforce strict security checks before store, update, or destroy actions.
 
-This React starter kit utilizes React 19, TypeScript, Tailwind, and the [shadcn/ui](https://ui.shadcn.com) and [radix-ui](https://www.radix-ui.com) component libraries.
+Super-Admin Bypass: Implemented a global Gate::before check in the application boot process to allow full system access for the Administrator role.
 
-## Official Documentation
+2. Dashboard & Analytics
+Data Visualization: Integrated Recharts for interactive Line and Bar charts to monitor real-time sales trends and inventory distribution.
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+Export Functionality: Enabled Excel reports using xlsx and PDF generation for comprehensive data documentation.
 
-## Contributing
+Media Capture: Implemented dom-to-image to allow users to capture and download dashboard charts as PNG images.
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+UI/UX Optimization: Refined chart responsiveness and dark mode compatibility, including custom tooltip styling.
 
-All contributions to the Starter Kits from now on should be made through [Maestro](https://github.com/laravel/maestro).
+3. Role & Permission Management UI
+Modular Permission Grouping: Refactored the role creation/editing form to automatically group permissions by module (e.g., products, users, sales), drastically improving usability.
 
-## Code of Conduct
+Streamlined Table View: Replaced dense permission lists in the main table with a "View Permissions" modal, resulting in a cleaner and more professional interface.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Bulk Operations: Enabled multi-selection and bulk deletion for roles and users to enhance administrative productivity.
 
-## License
+4. Technical Architecture
+Service-Oriented Pattern: Enforced a clean separation of concerns using the Service-Controller-Request pattern.
 
-The Laravel + React starter kit is open-sourced software licensed under the MIT license.
+Base Controller Hardening: Standardized the base Controller with AuthorizesRequests and ValidatesRequests traits to ensure consistent authorization and validation behavior across the entire system.
+
+State Management: Optimized React refs to ensure stable DOM rendering and reliable image exports.
